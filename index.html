@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Immersive View — Súper Tutorial Interactivo</title>
+<style>
+:root{
+  --bg:#0a0e1a;
+  --card:#0f172a;
+  --border:#1e3a5f;
+  --accent:#00d4ff;
+  --green:#22c55e;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --purple:#a855f7;
+  --txt:#e6f1ff;
+  --txt-dim:#94a3b8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.6;scroll-behavior:smooth}
+body{padding-top:64px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+img,svg{max-width:100%;display:block}
+
+/* Progress bar */
+#progress{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--accent),var(--purple));z-index:10000;transition:width .15s ease}
+
+/* Navbar */
+nav{position:fixed;top:3px;left:0;right:0;height:60px;background:rgba(10,14,26,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:9999;display:flex;align-items:center;padding:0 12px;gap:8px}
+nav .brand{color:var(--accent);font-weight:700;font-size:.95rem;white-space:nowrap;letter-spacing:.5px;padding-right:8px;border-right:1px solid var(--border);margin-right:4px}
+nav .navscroll{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:thin;padding:6px 0}
+nav .navscroll::-webkit-scrollbar{height:4px}
+nav .navscroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.nav-link{background:transparent;border:1px solid transparent;color:var(--txt-dim);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.82rem;font-family:inherit;white-space:nowrap;transition:all .2s}
+.nav-link:hover{color:var(--txt);background:rgba(0,212,255,.08)}
+.nav-link.active{color:var(--accent);background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.4)}
+.nav-link.credit{color:var(--purple);border-color:rgba(168,85,247,.3)}
+.nav-link.credit.active{color:var(--purple);background:rgba(168,85,247,.12);border-color:var(--purple)}
+
+/* Sections */
+.section{display:none;padding:24px 16px 80px;max-width:1100px;margin:0 auto;animation:fadeIn .35s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.card h2{color:var(--accent);font-size:1.35rem;margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.card h3{color:var(--txt);font-size:1.05rem;margin:14px 0 8px}
+.card h4{color:var(--accent);font-size:.95rem;margin:10px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+.card p{margin-bottom:10px;color:#cbd5e1}
+.card ul,.card ol{margin:10px 0 10px 22px;color:#cbd5e1}
+.card li{margin-bottom:6px}
+.card strong{color:var(--txt)}
+
+/* HOME */
+.hero-svg{width:100%;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:18px;box-shadow:0 0 40px rgba(0,212,255,.12)}
+.badge{display:inline-block;background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.4);color:var(--accent);padding:5px 12px;border-radius:20px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.hero-title{font-size:2.2rem;font-weight:800;background:linear-gradient(120deg,#00d4ff,#a855f7);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.15;margin-bottom:8px}
+.hero-sub{color:var(--txt-dim);font-size:1.05rem;margin-bottom:16px}
+.hero-desc{color:#cbd5e1;font-size:.98rem;margin-bottom:16px}
+.quote{border-left:3px solid var(--purple);padding:12px 16px;background:rgba(168,85,247,.06);border-radius:0 8px 8px 0;font-style:italic;color:#d8b4fe;margin:16px 0}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:18px 0}
+.metric{background:rgba(0,212,255,.05);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.metric .n{color:var(--accent);font-size:1.4rem;font-weight:700;display:block}
+.metric .l{color:var(--txt-dim);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px;color:var(--txt-dim);font-size:.85rem;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+
+/* Callouts */
+.callout{border-radius:10px;padding:14px 16px;margin:14px 0;border-left:4px solid;font-size:.92rem}
+.callout.info{background:rgba(0,212,255,.06);border-color:var(--accent)}
+.callout.info strong{color:var(--accent)}
+.callout.example{background:rgba(34,197,94,.06);border-color:var(--green)}
+.callout.example strong{color:var(--green)}
+.callout.warn{background:rgba(245,158,11,.06);border-color:var(--amber)}
+.callout.warn strong{color:var(--amber)}
+.callout.error{background:rgba(239,68,68,.06);border-color:var(--red)}
+.callout.error strong{color:var(--red)}
+
+/* Prompt blocks */
+.prompt{background:#060a14;border:1px solid var(--border);border-radius:10px;padding:14px;margin:12px 0;position:relative}
+.prompt-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prompt-header span{color:var(--accent);font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.copy-btn{background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.35);color:var(--accent);padding:5px 12px;border-radius:6px;font-size:.75rem;cursor:pointer;font-family:inherit;transition:all .2s}
+.copy-btn:hover{background:rgba(0,212,255,.25)}
+.copy-btn.copied{background:var(--green);color:#04120a;border-color:var(--green)}
+.prompt pre{white-space:pre-wrap;word-wrap:break-word;color:#a5f3fc;font-family:'Consolas','Monaco',monospace;font-size:.86rem;line-height:1.55}
+
+/* Steps */
+.steps{counter-reset:step;list-style:none;margin:14px 0;padding:0}
+.steps li{counter-increment:step;padding:12px 12px 12px 52px;background:rgba(0,212,255,.04);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;position:relative;color:#cbd5e1}
+.steps li::before{content:counter(step);position:absolute;left:12px;top:12px;width:28px;height:28px;background:var(--accent);color:#04121a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+
+/* Tables */
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;overflow-x:auto;display:block}
+.tbl table{width:100%;min-width:420px;border-collapse:collapse}
+.tbl th{background:rgba(0,212,255,.1);color:var(--accent);text-align:left;padding:10px;border:1px solid var(--border);font-size:.82rem;text-transform:uppercase;letter-spacing:.5px}
+.tbl td{padding:10px;border:1px solid var(--border);color:#cbd5e1}
+
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{background:rgba(0,212,255,.08);border:1px solid var(--border);color:var(--accent);padding:6px 12px;border-radius:16px;font-size:.8rem}
+.chip.g{color:var(--green);border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.07)}
+.chip.a{color:var(--amber);border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.07)}
+.chip.p{color:var(--purple);border-color:rgba(168,85,247,.4);background:rgba(168,85,247,.07)}
+
+/* Accordion */
+.acc{border:1px solid var(--border);border-radius:10px;margin:10px 0;overflow:hidden;background:var(--card)}
+.acc-h{background:rgba(0,212,255,.05);padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;color:var(--txt);font-size:.95rem;user-select:none}
+.acc-h:hover{background:rgba(0,212,255,.1)}
+.acc-h::after{content:'▾';color:var(--accent);transition:transform .3s}
+.acc.open .acc-h::after{transform:rotate(180deg)}
+.acc-b{max-height:0;overflow:hidden;transition:max-height .35s ease;padding:0 16px}
+.acc.open .acc-b{max-height:2500px;padding:14px 16px}
+.acc-b p,.acc-b ul,.acc-b ol{margin:8px 0;color:#cbd5e1}
+.acc-b ul,.acc-b ol{margin-left:20px}
+
+/* Flow diagram */
+.flow{display:flex;flex-direction:column;gap:6px;margin:14px 0;align-items:center}
+.flow .node{background:rgba(0,212,255,.08);border:1px solid var(--border);padding:10px 18px;border-radius:8px;color:var(--accent);font-size:.88rem;font-weight:600;text-align:center;min-width:180px}
+.flow .arrow{color:var(--purple);font-size:1.1rem}
+
+/* Back to top */
+#totop{position:fixed;bottom:20px;right:20px;width:44px;height:44px;background:var(--accent);color:#04121a;border:none;border-radius:50%;font-size:1.2rem;font-weight:700;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,212,255,.4);z-index:9998;transition:all .2s}
+#totop:hover{background:#00b8e0;transform:translateY(-2px)}
+#totop.show{display:flex}
+
+/* Footer */
+footer{background:var(--card);border-top:1px solid var(--border);padding:24px 16px;text-align:center;color:var(--txt-dim);font-size:.85rem;line-height:1.9}
+footer .sig{color:var(--accent);font-weight:600}
+footer .latin{color:var(--purple);font-style:italic;margin-top:8px}
+
+/* Credits */
+.credit-grid{display:grid;gap:12px;margin:16px 0}
+.credit-item{background:rgba(0,212,255,.05);border:1px solid var(--border);border-radius:10px;padding:14px}
+.credit-item .lbl{color:var(--txt-dim);font-size:.75rem;text-transform:uppercase;letter-spacing:.8px}
+.credit-item .val{color:var(--txt);font-size:1rem;font-weight:600;margin-top:4px}
+.credit-item .val.acc{color:var(--accent)}
+.credit-item .val.pur{color:var(--purple)}
+
+@media (max-width:640px){
+  .hero-title{font-size:1.5rem}
+  .card{padding:16px}
+  .card h2{font-size:1.15rem}
+  nav .brand{display:none}
+  body{padding-top:60px}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="brand">◈ IMMERSIVE</div>
+  <div class="navscroll" id="navscroll">
+    <button class="nav-link active" data-target="home">🏠 Inicio</button>
+    <button class="nav-link" data-target="quees">🧭 Qué es</button>
+    <button class="nav-link" data-target="primeros">🚀 Primeros pasos</button>
+    <button class="nav-link" data-target="ejercicios">🧪 Ejercicios</button>
+    <button class="nav-link" data-target="fisica">🔬 Física</button>
+    <button class="nav-link" data-target="musica">🎹 Música</button>
+    <button class="nav-link" data-target="mate">🧮 Matemáticas</button>
+    <button class="nav-link" data-target="metodo">🧠 Método</button>
+    <button class="nav-link" data-target="prompts">📝 Prompts</button>
+    <button class="nav-link" data-target="buenas">⚖️ Buenas prácticas</button>
+    <button class="nav-link" data-target="experimento">🎯 Experimento final</button>
+    <button class="nav-link" data-target="resumen">⚡ Resumen</button>
+    <button class="nav-link" data-target="fuentes">🔗 Fuentes</button>
+    <button class="nav-link credit" data-target="creditos">★ Créditos</button>
+  </div>
+</nav>
+
+<!-- TEMPLATE SVG (fuente única, se clona en HOME y CRÉDITOS) -->
+<template id="svgTemplate">
+<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Animación de exploración visual por nodos y capas de Immersive View">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070b14">
+        <animate attributeName="stop-color" values="#070b14;#0a1a2e;#141b3a;#070b14" dur="9s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" stop-color="#0a0e1a">
+        <animate attributeName="stop-color" values="#0a0e1a;#0f1a3a;#1a1145;#0a0e1a" dur="9s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#070b14">
+        <animate attributeName="stop-color" values="#070b14;#0a1a2e;#141b3a;#070b14" dur="9s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e3a5f" stroke-width="0.5"/>
+    </pattern>
+
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glowStrong" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <radialGradient id="haloCyan">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.75"/>
+      <stop offset="60%" stop-color="#00d4ff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haloPurple">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haloGreen">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haloAmber">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- paths de flujo (exploración en capas) -->
+    <path id="p1" d="M 400 240 Q 400 170 400 118"/>
+    <path id="p2" d="M 400 240 Q 470 200 510 152"/>
+    <path id="p3" d="M 400 240 Q 470 280 520 322"/>
+    <path id="p4" d="M 400 240 Q 400 310 400 358"/>
+    <path id="p5" d="M 400 240 Q 330 280 280 322"/>
+    <path id="p6" d="M 400 240 Q 330 200 290 152"/>
+    <path id="p7" d="M 510 152 Q 590 130 660 118"/>
+    <path id="p8" d="M 520 322 Q 590 350 660 362"/>
+    <path id="p9" d="M 280 152 Q 210 130 145 120"/>
+    <path id="p10" d="M 280 322 Q 210 350 145 360"/>
+  </defs>
+
+  <!-- Fondo -->
+  <rect width="800" height="450" fill="url(#bgGrad)"/>
+  <rect width="800" height="450" fill="url(#grid)">
+    <animate attributeName="opacity" values="0.25;0.65;0.25" dur="6s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Anillos orbitales concéntricos -->
+  <g transform="translate(400 240)" opacity="0.55">
+    <circle r="180" fill="none" stroke="#00d4ff" stroke-width="1" stroke-dasharray="6 14" filter="url(#glow)">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="18s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-dasharray" values="6 14;2 22;10 8;6 14" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="145" fill="none" stroke="#a855f7" stroke-width="1" stroke-dasharray="10 20" filter="url(#glow)">
+      <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="13s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-dasharray" values="10 20;4 30;14 12;10 20" dur="7s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="108" fill="none" stroke="#22c55e" stroke-width="0.8" stroke-dasharray="4 10" opacity="0.7">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="9s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Halo pulsante alrededor del nodo central -->
+  <circle cx="400" cy="240" r="40" fill="url(#haloCyan)">
+    <animate attributeName="r" values="40;78;40" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.9;0.35;0.9" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="400" cy="240" r="28" fill="url(#haloPurple)">
+    <animate attributeName="r" values="28;55;28" dur="5.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="5.5s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Paths de flujo con partículas -->
+  <g stroke="#00d4ff" stroke-width="1.5" fill="none" opacity="0.55" filter="url(#glow)">
+    <use href="#p1"><animate attributeName="stroke-dashoffset" values="0;-30" dur="2s" repeatCount="indefinite"/><animate attributeName="stroke-dasharray" values="4 8" dur="2s" repeatCount="indefinite"/></use>
+    <use href="#p2"><animate attributeName="stroke-dashoffset" values="0;-30" dur="2.5s" repeatCount="indefinite"/><animate attributeName="stroke-dasharray" values="4 8" dur="2.5s" repeatCount="indefinite"/></use>
+    <use href="#p3"><animate attributeName="stroke-dashoffset" values="0;-30" dur="3s" repeatCount="indefinite"/><animate attributeName="stroke-dasharray" values="4 8" dur="3s" repeatCount="indefinite"/></use>
+    <use href="#p4"><animate attributeName="stroke-dashoffset" values="0;-30" dur="3.5s" repeatCount="indefinite"/><animate attributeName="stroke-dasharray" values="4 8" dur="3.5s" repeatCount="indefinite"/></use>
+    <use href="#p5"><animate attributeName="stroke-dashoffset" values="0;-30" dur="2.7s" repeatCount="indefinite"/><animate attributeName="stroke-dasharray" values="4 8" dur="2.7s" repeatCount="indefinite"/></use>
+    <use href="#p6"><animate attributeName="stroke-dashoffset" values="0;-30" dur="3.2s" repeatCount="indefinite"/><animate attributeName="stroke-dasharray" values="4 8" dur="3.2s" repeatCount="indefinite"/></use>
+  </g>
+  <g stroke="#a855f7" stroke-width="1.2" fill="none" opacity="0.45" filter="url(#glow)">
+    <use href="#p7"><animate attributeName="stroke-dashoffset" values="0;-25" dur="2.3s" repeatCount="indefinite"/><animate attributeName="stroke-dasharray" values="3 9" dur="2.3s" repeatCount="indefinite"/></use>
+    <use href="#p8"><animate attributeName="stroke-dashoffset" values="0;-25" dur="2.9s" repeatCount="indefinite"/><animate attributeName="stroke-dasharray" values="3 9" dur="2.9s" repeatCount="indefinite"/></use>
+    <use href="#p9"><animate attributeName="stroke-dashoffset" values="0;-25" dur="3.3s" repeatCount="indefinite"/><animate attributeName="stroke-dasharray" values="3 9" dur="3.3s" repeatCount="indefinite"/></use>
+    <use href="#p10"><animate attributeName="stroke-dashoffset" values="0;-25" dur="3.7s" repeatCount="indefinite"/><animate attributeName="stroke-dasharray" values="3 9" dur="3.7s" repeatCount="indefinite"/></use>
+  </g>
+
+  <!-- Partículas viajando por paths (cyan desde el centro) -->
+  <g filter="url(#glowStrong)">
+    <circle r="3.5" fill="#00d4ff"><animateMotion dur="2.4s" repeatCount="indefinite" begin="0s"><mpath href="#p1"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="2.4s" repeatCount="indefinite" begin="0s"/></circle>
+    <circle r="3.5" fill="#00d4ff"><animateMotion dur="2.9s" repeatCount="indefinite" begin="0.6s"><mpath href="#p2"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="2.9s" repeatCount="indefinite" begin="0.6s"/></circle>
+    <circle r="3.5" fill="#00d4ff"><animateMotion dur="3.1s" repeatCount="indefinite" begin="1.1s"><mpath href="#p3"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="3.1s" repeatCount="indefinite" begin="1.1s"/></circle>
+    <circle r="3.5" fill="#00d4ff"><animateMotion dur="3.4s" repeatCount="indefinite" begin="0.9s"><mpath href="#p4"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="3.4s" repeatCount="indefinite" begin="0.9s"/></circle>
+    <circle r="3.5" fill="#00d4ff"><animateMotion dur="3.6s" repeatCount="indefinite" begin="1.4s"><mpath href="#p5"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="3.6s" repeatCount="indefinite" begin="1.4s"/></circle>
+    <circle r="3.5" fill="#00d4ff"><animateMotion dur="2.8s" repeatCount="indefinite" begin="0.4s"><mpath href="#p6"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" dur="2.8s" repeatCount="indefinite" begin="0.4s"/></circle>
+  </g>
+
+  <!-- Ghost elements (elementos fantasma que recorren la rama y se desvanecen) -->
+  <g filter="url(#glow)">
+    <circle r="6" fill="#a855f7" opacity="0"><animateMotion dur="4.5s" repeatCount="indefinite" begin="0s"><mpath href="#p7"/></animateMotion><animate attributeName="opacity" values="0;0.8;0.8;0" dur="4.5s" repeatCount="indefinite" begin="0s"/><animate attributeName="r" values="6;9;6" dur="4.5s" repeatCount="indefinite"/></circle>
+    <circle r="6" fill="#a855f7" opacity="0"><animateMotion dur="5s" repeatCount="indefinite" begin="1.2s"><mpath href="#p8"/></animateMotion><animate attributeName="opacity" values="0;0.8;0.8;0" dur="5s" repeatCount="indefinite" begin="1.2s"/><animate attributeName="r" values="6;9;6" dur="5s" repeatCount="indefinite"/></circle>
+    <circle r="6" fill="#22c55e" opacity="0"><animateMotion dur="5.5s" repeatCount="indefinite" begin="0.5s"><mpath href="#p9"/></animateMotion><animate attributeName="opacity" values="0;0.85;0.85;0" dur="5.5s" repeatCount="indefinite" begin="0.5s"/><animate attributeName="r" values="6;9;6" dur="5.5s" repeatCount="indefinite"/></circle>
+    <circle r="6" fill="#22c55e" opacity="0"><animateMotion dur="4.8s" repeatCount="indefinite" begin="1.8s"><mpath href="#p10"/></animateMotion><animate attributeName="opacity" values="0;0.85;0.85;0" dur="4.8s" repeatCount="indefinite" begin="1.8s"/><animate attributeName="r" values="6;9;6" dur="4.8s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <!-- NODO CENTRAL (tema) -->
+  <g>
+    <circle cx="400" cy="240" r="22" fill="#0a0e1a" stroke="#00d4ff" stroke-width="2" filter="url(#glowStrong)"/>
+    <circle cx="400" cy="240" r="22" fill="none" stroke="#00d4ff" stroke-width="2">
+      <animate attributeName="r" values="22;30;22" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.15;1" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <text x="400" y="245" text-anchor="middle" fill="#00d4ff" font-family="Segoe UI,sans-serif" font-size="10" font-weight="700" letter-spacing="1">TEMA</text>
+    <circle cx="400" cy="240" r="4" fill="#00d4ff" filter="url(#glowStrong)">
+      <animate attributeName="r" values="4;6;4" dur="1.6s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- NODOS PERIFÉRICOS (niveles de profundización) -->
+  <!-- Nivel 1: seis nodos alrededor del centro -->
+  <g>
+    <!-- arriba -->
+    <circle cx="400" cy="118" r="14" fill="#0a0e1a" stroke="#00d4ff" stroke-width="1.8" filter="url(#glow)">
+      <animate attributeName="stroke-width" values="1.8;3;1.8" dur="2.7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="400" cy="118" r="14" fill="none" stroke="#00d4ff" opacity="0.4">
+      <animate attributeName="r" values="14;22;14" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0;0.5" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <text x="400" y="122" text-anchor="middle" fill="#00d4ff" font-size="8" font-weight="700">I</text>
+
+    <!-- arriba-derecha -->
+    <circle cx="510" cy="152" r="14" fill="#0a0e1a" stroke="#22c55e" stroke-width="1.8" filter="url(#glow)">
+      <animate attributeName="stroke-width" values="1.8;3;1.8" dur="3.1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="510" cy="152" r="14" fill="none" stroke="#22c55e" opacity="0.4">
+      <animate attributeName="r" values="14;22;14" dur="3.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0;0.5" dur="3.4s" repeatCount="indefinite"/>
+    </circle>
+    <text x="510" y="156" text-anchor="middle" fill="#22c55e" font-size="8" font-weight="700">II</text>
+
+    <!-- abajo-derecha -->
+    <circle cx="520" cy="322" r="14" fill="#0a0e1a" stroke="#f59e0b" stroke-width="1.8" filter="url(#glow)">
+      <animate attributeName="stroke-width" values="1.8;3;1.8" dur="2.9s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="520" cy="322" r="14" fill="none" stroke="#f59e0b" opacity="0.4">
+      <animate attributeName="r" values="14;22;14" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0;0.5" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <text x="520" y="326" text-anchor="middle" fill="#f59e0b" font-size="8" font-weight="700">III</text>
+
+    <!-- abajo -->
+    <circle cx="400" cy="358" r="14" fill="#0a0e1a" stroke="#ef4444" stroke-width="1.8" filter="url(#glow)">
+      <animate attributeName="stroke-width" values="1.8;3;1.8" dur="3.3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="400" cy="358" r="14" fill="none" stroke="#ef4444" opacity="0.4">
+      <animate attributeName="r" values="14;22;14" dur="3.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0;0.5" dur="3.6s" repeatCount="indefinite"/>
+    </circle>
+    <text x="400" y="362" text-anchor="middle" fill="#ef4444" font-size="8" font-weight="700">IV</text>
+
+    <!-- abajo-izquierda -->
+    <circle cx="280" cy="322" r="14" fill="#0a0e1a" stroke="#a855f7" stroke-width="1.8" filter="url(#glow)">
+      <animate attributeName="stroke-width" values="1.8;3;1.8" dur="2.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="280" cy="322" r="14" fill="none" stroke="#a855f7" opacity="0.4">
+      <animate attributeName="r" values="14;22;14" dur="3.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0;0.5" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <text x="280" y="326" text-anchor="middle" fill="#a855f7" font-size="8" font-weight="700">V</text>
+
+    <!-- arriba-izquierda -->
+    <circle cx="290" cy="152" r="14" fill="#0a0e1a" stroke="#00d4ff" stroke-width="1.8" filter="url(#glow)">
+      <animate attributeName="stroke-width" values="1.8;3;1.8" dur="3.7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="290" cy="152" r="14" fill="none" stroke="#00d4ff" opacity="0.4">
+      <animate attributeName="r" values="14;22;14" dur="2.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0;0.5" dur="2.8s" repeatCount="indefinite"/>
+    </circle>
+    <text x="290" y="156" text-anchor="middle" fill="#00d4ff" font-size="8" font-weight="700">VI</text>
+  </g>
+
+  <!-- Nivel 2: sub-nodos (profundización) -->
+  <g opacity="0.85">
+    <circle cx="660" cy="118" r="9" fill="#0a0e1a" stroke="#22c55e" stroke-width="1.4">
+      <animate attributeName="stroke-width" values="1.4;2.5;1.4" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="660" cy="362" r="9" fill="#0a0e1a" stroke="#f59e0b" stroke-width="1.4">
+      <animate attributeName="stroke-width" values="1.4;2.5;1.4" dur="4.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="145" cy="120" r="9" fill="#0a0e1a" stroke="#a855f7" stroke-width="1.4">
+      <animate attributeName="stroke-width" values="1.4;2.5;1.4" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="145" cy="360" r="9" fill="#0a0e1a" stroke="#00d4ff" stroke-width="1.4">
+      <animate attributeName="stroke-width" values="1.4;2.5;1.4" dur="5.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="5.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Explosiones radiales breves -->
+  <g stroke="#00d4ff" stroke-width="1.5" fill="none" opacity="0">
+    <g transform="translate(400 240)">
+      <line x1="0" y1="0" x2="30" y2="0"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2s" repeatCount="indefinite"/></line>
+      <line x1="0" y1="0" x2="0" y2="-30"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2s" repeatCount="indefinite"/></line>
+      <line x1="0" y1="0" x2="-30" y2="0"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2s" repeatCount="indefinite"/></line>
+      <line x1="0" y1="0" x2="0" y2="30"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2s" repeatCount="indefinite"/></line>
+      <animate attributeName="opacity" values="0;0.9;0" dur="2s" repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <!-- Indicador LIVE en esquina -->
+  <g transform="translate(720 22)">
+    <circle cx="0" cy="0" r="6" fill="#ef4444" filter="url(#glowStrong)">
+      <animate attributeName="r" values="5;8;5" dur="1.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.4;1" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+    <text x="14" y="4" fill="#ef4444" font-family="Segoe UI,sans-serif" font-size="11" font-weight="700" letter-spacing="2">LIVE</text>
+  </g>
+
+  <!-- Etiqueta estado pulsante -->
+  <g transform="translate(20 22)">
+    <text x="0" y="4" fill="#22c55e" font-family="Segoe UI,sans-serif" font-size="10" font-weight="600" letter-spacing="1.5">
+      <animate attributeName="opacity" values="1;0.3;1" dur="2.2s" repeatCount="indefinite"/>
+      ▶ EXPLORANDO
+    </text>
+  </g>
+
+  <!-- Título principal con color cíclico -->
+  <text x="400" y="42" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="22" font-weight="800" letter-spacing="4">
+    IMMERSIVE VIEW
+    <animate attributeName="fill" values="#00d4ff;#a855f7;#22c55e;#f59e0b;#00d4ff" dur="9s" repeatCount="indefinite"/>
+  </text>
+  <text x="400" y="60" text-anchor="middle" fill="#94a3b8" font-family="Segoe UI,sans-serif" font-size="10" letter-spacing="3" opacity="0.85">
+    APRENDER EXPLORANDO POR CAPAS
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="3.5s" repeatCount="indefinite"/>
+  </text>
+
+  <!-- Firmas y estado en la parte inferior -->
+  <g transform="translate(400 435)">
+    <text x="0" y="0" text-anchor="middle" fill="#00d4ff" font-family="Segoe UI,sans-serif" font-size="10" font-weight="600" letter-spacing="1.5">
+      Rubén Sbarsky
+      <animate attributeName="opacity" values="0.55;1;0.55" dur="4s" repeatCount="indefinite"/>
+    </text>
+  </g>
+
+  <!-- Flash central de concepto (aparece cíclicamente) -->
+  <g transform="translate(400 240)" pointer-events="none">
+    <text x="0" y="-60" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="16" font-weight="800" letter-spacing="3" fill="#00d4ff" filter="url(#glowStrong)">
+      DESCUBRIR
+      <animate attributeName="opacity" values="0;0;1;1;0;0" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#00d4ff;#a855f7;#22c55e;#00d4ff" dur="6s" repeatCount="indefinite"/>
+    </text>
+  </g>
+
+  <g transform="translate(400 240)" pointer-events="none">
+    <text x="0" y="70" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#22c55e">
+      PROFUNDIZAR
+      <animate attributeName="opacity" values="0;0;0;1;1;0" dur="7s" repeatCount="indefinite"/>
+    </text>
+  </g>
+</svg>
+</template>
+
+<!-- ============ HOME ============ -->
+<section id="home" class="section active">
+  <div class="hero-svg" id="home-svg"></div>
+
+  <span class="badge">◈ Tutorial Interactivo · Aprendizaje Visual</span>
+  <h1 class="hero-title">Gemini Immersive View</h1>
+  <p class="hero-sub">Súper tutorial paso a paso para aprender explorando visualmente</p>
+
+  <div class="card">
+    <p class="hero-desc">
+      <strong>Objetivo:</strong> aprender a utilizar la experiencia denominada <strong>Immersive View</strong> que ha aparecido en Gemini: entender qué es, cómo acceder a ella, cómo explorarla y cómo convertirla en una herramienta real de aprendizaje.
+    </p>
+    <div class="callout warn">
+      <strong>⚠ Importante sobre el estado de la función:</strong> a fecha de este tutorial, Google ha confirmado oficialmente el hub de estudiantes de Gemini y las <strong>visualizaciones interactivas</strong>, incluidas simulaciones 3D funcionales. La experiencia concreta llamada <strong>Immersive View</strong> fue detectada públicamente el 7 de septiembre de 2026 dentro del área de estudiantes, pero su estado de despliegue específico no aparece descrito por Google como una función independiente. Por tanto, este tutorial distingue entre funciones oficialmente documentadas por Google y el comportamiento observado de Immersive View.
+    </div>
+
+    <div class="quote">
+      "Si no puedes explicarlo de forma sencilla, es que no lo entiendes lo suficientemente bien."
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><span class="n">35</span><span class="l">Secciones</span></div>
+      <div class="metric"><span class="n">11</span><span class="l">Ejercicios</span></div>
+      <div class="metric"><span class="n">4</span><span class="l">Prompts maestros</span></div>
+      <div class="metric"><span class="n">7</span><span class="l">Fases del método</span></div>
+      <div class="metric"><span class="n">2026</span><span class="l">Actualización</span></div>
+    </div>
+
+    <div class="meta-row">
+      <span>📅 <strong>24/09/2026</strong></span>
+      <span>🕐 <strong>16:36:16</strong></span>
+      <span>✍ <strong>Rubén Sbarsky</strong></span>
+      <span>⚖ Fiat iustitia, ruat caelum.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Cómo usar este tutorial</h2>
+    <p>Este tutorial está diseñado como una <strong>SPA (aplicación de una sola página)</strong>. Usa la barra de navegación superior para recorrer las distintas secciones. Cada sección es independiente y conserva íntegro el contenido original del documento fuente.</p>
+    <div class="chips">
+      <span class="chip">Navegación SPA</span>
+      <span class="chip g">Sin recargas</span>
+      <span class="chip a">Barra de progreso</span>
+      <span class="chip p">Botones de copiado</span>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ QUÉ ES ============ -->
+<section id="quees" class="section">
+  <div class="card">
+    <h2>🧭 ¿Qué es Immersive View?</h2>
+
+    <h3>1.1 La idea en una frase</h3>
+    <p>Immersive View convierte un tema en una <strong>exploración visual por capas</strong>.</p>
+    <p>En lugar de hacer:</p>
+    <div class="flow">
+      <div class="node">pregunta → respuesta → siguiente pregunta</div>
+    </div>
+    <p>la idea es:</p>
+    <div class="flow">
+      <div class="node">tema → imagen/mapa visual → punto interesante</div>
+      <span class="arrow">↓</span>
+      <div class="node">nueva capa → otro punto → más profundidad</div>
+    </div>
+    <p>Los primeros reportes públicos describen una experiencia en la que eliges un tema, aparece una imagen con distintos puntos o nodos y puedes pulsar sobre ellos para profundizar. En algunos recorridos se puede llegar desde un tema macroscópico hasta conceptos relacionados con átomos y moléculas.</p>
+
+    <h3>1.2 No confundir tres cosas</h3>
+    <p>Actualmente existen en el ecosistema de Gemini varias experiencias relacionadas con el aprendizaje visual:</p>
+
+    <h4>A. Interactive Images</h4>
+    <p>Google introdujo imágenes interactivas que permiten seleccionar partes de determinados diagramas para obtener explicaciones adicionales.</p>
+
+    <h4>B. Interactive Visualizations</h4>
+    <p>Google anunció en 2026 visualizaciones interactivas capaces de generar elementos como tablas, cuadrículas y simulaciones funcionales en 3D. Por ejemplo, se puede pedir una representación 3D del ADN o una simulación de un péndulo.</p>
+
+    <h4>C. Immersive View</h4>
+    <p>La experiencia concreta llamada <strong>Immersive View</strong> fue observada en septiembre de 2026 dentro del área de estudiantes de Gemini. Los reportes describen una navegación visual mediante nodos que permite profundizar progresivamente en un tema. Su disponibilidad y alcance pueden cambiar porque Google no la ha presentado como una función independiente en sus páginas públicas de producto.</p>
+
+    <div class="callout info">
+      <strong>Conclusión:</strong> este tutorial enseña Immersive View, pero también te enseña a aprovechar las visualizaciones interactivas oficiales de Gemini, porque forman parte de la misma dirección de aprendizaje visual.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔬 Visualizaciones 3D: el otro gran poder</h2>
+    <p>Google documenta oficialmente que Gemini puede generar visualizaciones interactivas y simulaciones funcionales en 3D.</p>
+    <p>Esto permite pasar de:</p>
+    <div class="flow"><div class="node">"Explícame el ADN"</div></div>
+    <p>a:</p>
+    <div class="flow"><div class="node">"Muéstrame cómo funciona el ADN en 3D."</div></div>
+    <p>Google pone precisamente el ADN como ejemplo: la estructura puede rotarse y ampliarse interactivamente.</p>
+  </div>
+
+  <div class="card">
+    <h2>🗺 Immersive View como mapa mental</h2>
+    <p>Una forma útil de entender Immersive View es imaginar una <strong>mind map que puedes recorrer visualmente</strong>.</p>
+    <p>Pero con una diferencia: una mind map tradicional tiene nodos creados previamente. Aquí la experiencia puede llevarte a nuevos niveles de información.</p>
+    <p>El reporte de TestingCatalog describe precisamente la experiencia como mapas visuales de temas con nodos clicables.</p>
+    <p>Por eso resulta especialmente interesante para:</p>
+    <div class="chips">
+      <span class="chip">estudiar</span>
+      <span class="chip g">descubrir conexiones</span>
+      <span class="chip a">iniciar una investigación</span>
+      <span class="chip p">generar preguntas</span>
+      <span class="chip">explorar un campo desconocido</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>💡 Lo más interesante de todo</h2>
+    <p>Immersive View no debería entenderse solamente como:</p>
+    <div class="flow"><div class="node">"una cosa bonita de Gemini."</div></div>
+    <p>La idea importante es otra: <strong>la interfaz puede convertirse en parte del proceso de razonamiento.</strong></p>
+    <ul>
+      <li>En vez de recibir una explicación sobre un sistema: <strong>lo exploras.</strong></li>
+      <li>En vez de leer una relación: <strong>la manipulas.</strong></li>
+      <li>En vez de recibir todas las respuestas: <strong>sigues pistas.</strong></li>
+      <li>En vez de comenzar sabiendo qué preguntar: <strong>la propia representación genera nuevas preguntas.</strong></li>
+    </ul>
+    <p>Y eso puede ser especialmente útil cuando el problema no es:</p>
+    <div class="flow"><div class="node">"No sé la respuesta."</div></div>
+    <p>sino:</p>
+    <div class="flow"><div class="node">"Ni siquiera sé qué debería preguntar."</div></div>
+  </div>
+
+  <div class="card">
+    <h2>📊 Estado actual y qué esperar</h2>
+    <p>A fecha de <strong>24 de septiembre de 2026</strong>:</p>
+    <ul>
+      <li>Google ha confirmado oficialmente el hub de estudiantes de Gemini.</li>
+      <li>Google ha confirmado oficialmente las visualizaciones interactivas y simulaciones 3D funcionales.</li>
+      <li>Google ya había introducido imágenes interactivas para explorar diagramas y conceptos.</li>
+      <li>La experiencia concreta denominada <strong>Immersive View</strong> fue detectada públicamente en septiembre de 2026 dentro del área de estudiantes.</li>
+      <li>El estado exacto de despliegue de Immersive View como función independiente no está claramente documentado por Google, por lo que puede cambiar o no estar disponible para todas las cuentas.</li>
+    </ul>
+    <p>Por eso conviene distinguir:</p>
+    <div class="chips">
+      <span class="chip">función oficialmente documentada</span>
+      <span class="chip p">experiencia observada durante un despliegue experimental</span>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ PRIMEROS PASOS ============ -->
+<section id="primeros" class="section">
+  <div class="card">
+    <h2>🚀 Antes de empezar</h2>
+    <p>Necesitas:</p>
+    <ul>
+      <li>Una cuenta de Google.</li>
+      <li>Acceso a Gemini.</li>
+      <li>Un navegador compatible si utilizas la versión web.</li>
+      <li>Tener disponible la experiencia en tu cuenta o región.</li>
+    </ul>
+    <p>Google indica que la aplicación web de Gemini funciona con navegadores como Chrome, Safari, Firefox, Opera y Edge/Edgium. Algunas funciones dependen de la cuenta, ubicación y dispositivo.</p>
+
+    <h3>2.1 La página que debes probar</h3>
+    <p>Abre:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>URL</span></div>
+      <pre>https://gemini.google.com/immersive-view</pre>
+    </div>
+    <p>Si la experiencia está disponible para tu cuenta, debería cargarse.</p>
+    <p>También puedes probar el área de estudiantes:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>URL</span></div>
+      <pre>https://gemini.google.com/students</pre>
+    </div>
+    <p>Google presentó oficialmente este hub para reunir herramientas de aprendizaje de Gemini.</p>
+  </div>
+
+  <div class="card">
+    <h2>🧪 PRIMER EJERCICIO: comprobar si tienes Immersive View</h2>
+    <h3>Objetivo</h3>
+    <p>Simplemente comprobar que puedes entrar.</p>
+    <ol class="steps">
+      <li>Abre el navegador.</li>
+      <li>Entra en: <code>https://gemini.google.com/immersive-view</code></li>
+      <li>Inicia sesión con tu cuenta de Google si Gemini te lo solicita.</li>
+      <li>Mira qué aparece.</li>
+    </ol>
+    <p>Puede ocurrir una de estas situaciones:</p>
+
+    <div class="acc" data-acc>
+      <div class="acc-h">Caso A — aparece Immersive View</div>
+      <div class="acc-b"><p>Perfecto. Continúa con el tutorial.</p></div>
+    </div>
+    <div class="acc" data-acc>
+      <div class="acc-h">Caso B — Gemini te lleva a otra sección</div>
+      <div class="acc-b"><p>No significa necesariamente que hayas hecho algo mal. Puede tratarse de disponibilidad gradual, cambios de interfaz o de una experiencia experimental.</p></div>
+    </div>
+    <div class="acc" data-acc>
+      <div class="acc-h">Caso C — no aparece</div>
+      <div class="acc-b"><p>No abandones el tutorial. Las visualizaciones interactivas de Gemini están documentadas oficialmente y pueden utilizarse aunque Immersive View concreto no aparezca en tu cuenta.</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ EJERCICIOS ============ -->
+<section id="ejercicios" class="section">
+  <div class="card">
+    <h2>🧪 SEGUNDO EJERCICIO: explorar un tema sin hacer preguntas</h2>
+    <p>Esta es la parte fundamental.</p>
+    <h3>Objetivo</h3>
+    <p>Experimentar con el concepto de <strong>curiosidad guiada por imágenes</strong>.</p>
+    <p>Si Immersive View te muestra una colección de temas, elige uno que realmente te interese.</p>
+    <p>Buenas opciones para empezar:</p>
+    <div class="chips">
+      <span class="chip">Dinosaurios</span>
+      <span class="chip">Espacio</span>
+      <span class="chip">Quásares</span>
+      <span class="chip">Cuerpo humano</span>
+      <span class="chip">ADN</span>
+      <span class="chip">Evolución</span>
+      <span class="chip">Sistema solar</span>
+      <span class="chip">Electricidad</span>
+      <span class="chip">Moléculas</span>
+    </div>
+    <ol class="steps">
+      <li>Elige un tema.</li>
+      <li>Observa la imagen completa antes de tocar nada. No intentes entenderlo todo. Simplemente pregunta mentalmente: <em>"¿Qué parte me llama la atención?"</em></li>
+      <li>Pulsa un nodo o punto que te resulte interesante.</li>
+      <li>Lee la nueva información.</li>
+      <li>Busca otro elemento que despierte tu curiosidad.</li>
+      <li>Vuelve a pulsar.</li>
+    </ol>
+    <div class="callout info">
+      <strong>INFO:</strong> La idea es que <strong>no tengas que saber previamente qué pregunta hacer</strong>. La interfaz te propone caminos.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧪 TERCER EJERCICIO: baja un nivel</h2>
+    <p>Supongamos que estás explorando dinosaurios.</p>
+    <p>No intentes memorizar. Haz esto:</p>
+    <ol class="steps">
+      <li>Elige un dinosaurio.</li>
+      <li>Observa qué información aparece.</li>
+      <li>Elige una característica.</li>
+      <li>Explora esa característica.</li>
+      <li>Continúa hasta que encuentres algo que no entiendas.</li>
+    </ol>
+    <p>Cuando encuentres algo que no entiendas:</p>
+    <div class="callout example"><strong>EJEMPLO:</strong> ahí empieza el aprendizaje real.</div>
+  </div>
+
+  <div class="card">
+    <h2>🧪 CUARTO EJERCICIO: sigue una cadena de curiosidad</h2>
+    <p>Ahora vamos a hacerlo deliberadamente.</p>
+    <p>Ejemplo conceptual:</p>
+    <div class="flow">
+      <div class="node">Dinosaurio</div><span class="arrow">↓</span>
+      <div class="node">huesos</div><span class="arrow">↓</span>
+      <div class="node">estructura ósea</div><span class="arrow">↓</span>
+      <div class="node">células</div><span class="arrow">↓</span>
+      <div class="node">proteínas</div><span class="arrow">↓</span>
+      <div class="node">moléculas</div>
+    </div>
+    <p>Los reportes sobre Immersive View describen precisamente recorridos con varios niveles de nodos y, en determinados caminos, una profundización que llega hasta átomos y moléculas.</p>
+    <p>No importa que tu recorrido sea diferente. Lo importante es aprender a <strong>seguir una cadena de relaciones</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h2>🧪 QUINTO EJERCICIO: intenta perderte</h2>
+    <p>Sí. Hazlo a propósito.</p>
+    <p>Elige un tema y comienza a pulsar elementos solamente porque te llaman la atención.</p>
+    <p>No busques llegar a un destino.</p>
+    <p>Después de unos minutos pregúntate:</p>
+    <div class="flow"><div class="node">¿Cómo he llegado hasta aquí?</div></div>
+    <p>Si puedes reconstruir el camino, acabas de practicar una forma muy interesante de aprendizaje asociativo.</p>
+  </div>
+
+  <div class="card">
+    <h2>🧪 SEXTO EJERCICIO: ADN en 3D</h2>
+    <p>En Gemini escribe:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt ADN 3D</span><button class="copy-btn" data-target="p-adn">Copiar</button></div>
+      <pre id="p-adn">Muéstrame cómo funciona el ADN en 3D.
+
+Quiero una visualización interactiva que pueda rotar y ampliar.
+
+Después explícame qué estoy viendo, pero no me des
+una explicación larga hasta que yo explore primero.</pre>
+    </div>
+    <h3>Qué debes hacer</h3>
+    <ol class="steps">
+      <li>Espera a que aparezca la visualización.</li>
+      <li>Rótala.</li>
+      <li>Amplíala.</li>
+      <li>Reduce el zoom.</li>
+      <li>Observa qué cambia.</li>
+      <li>Después pregunta.</li>
+    </ol>
+    <p>Por ejemplo:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-adn2">Copiar</button></div>
+      <pre id="p-adn2">Ahora explícame exactamente qué estoy viendo.</pre>
+    </div>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-adn3">Copiar</button></div>
+      <pre id="p-adn3">Señálame las partes más importantes una por una.</pre>
+    </div>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-adn4">Copiar</button></div>
+      <pre id="p-adn4">Hazme tres preguntas para comprobar si realmente entendí
+lo que acabo de explorar.</pre>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ FÍSICA ============ -->
+<section id="fisica" class="section">
+  <div class="card">
+    <h2>🔬 SÉPTIMO EJERCICIO: Física — El péndulo</h2>
+    <p>Este ejercicio es especialmente interesante.</p>
+    <p>Prueba:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Péndulo</span><button class="copy-btn" data-target="p-pen">Copiar</button></div>
+      <pre id="p-pen">Muéstrame una simulación interactiva de un péndulo.
+
+Quiero poder observar cómo cambia su energía durante el movimiento.
+
+Primero déjame explorar la simulación.
+Después explícame qué está ocurriendo.</pre>
+    </div>
+    <p>Google utiliza precisamente el ejemplo de un péndulo que intercambia energía durante el movimiento para explicar sus visualizaciones interactivas.</p>
+  </div>
+
+  <div class="card">
+    <h2>🔬 OCTAVO EJERCICIO: no preguntes, exige una simulación</h2>
+    <p>Prueba con:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Segunda Ley de Newton</span><button class="copy-btn" data-target="p-newton">Copiar</button></div>
+      <pre id="p-newton">Quiero comprender la segunda ley de Newton.
+
+No quiero solamente una explicación textual.
+
+Crea una simulación interactiva que me permita modificar
+masa y fuerza y observar qué ocurre con la aceleración.
+
+Después explícame la relación entre las tres variables.</pre>
+    </div>
+    <p>La idea es pasar de:</p>
+    <div class="flow"><div class="node">leer una ley</div></div>
+    <p>a:</p>
+    <div class="flow"><div class="node">experimentar con la ley.</div></div>
+  </div>
+
+  <div class="card">
+    <h2>🔬 EJEMPLO REAL: campo eléctrico</h2>
+    <p>Supongamos que quieres estudiar: <strong>qué es realmente un campo eléctrico.</strong></p>
+
+    <h3>Paso 1</h3>
+    <p>Pide una visualización:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-ef1">Copiar</button></div>
+      <pre id="p-ef1">Muéstrame un campo eléctrico de forma interactiva.
+
+Quiero poder colocar una carga y observar cómo cambia
+el campo alrededor de ella.</pre>
+    </div>
+
+    <h3>Paso 2</h3>
+    <p>Experimenta.</p>
+
+    <h3>Paso 3</h3>
+    <p>Pregunta:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-ef2">Copiar</button></div>
+      <pre id="p-ef2">¿Qué representa exactamente cada línea?</pre>
+    </div>
+
+    <h3>Paso 4</h3>
+    <p>Cambia la carga.</p>
+
+    <h3>Paso 5</h3>
+    <p>Pregunta:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-ef3">Copiar</button></div>
+      <pre id="p-ef3">¿Por qué cambia el campo de esta manera?</pre>
+    </div>
+
+    <h3>Paso 6</h3>
+    <p>Ahora pide matemáticas:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-ef4">Copiar</button></div>
+      <pre id="p-ef4">Ahora relaciona lo que acabo de observar con la ecuación
+del campo eléctrico.
+
+Quiero que conectes cada elemento de la ecuación
+con algo que haya observado en la simulación.</pre>
+    </div>
+    <div class="callout example"><strong>EJEMPLO:</strong> Esto es aprendizaje basado en observación.</div>
+  </div>
+
+  <div class="card">
+    <h2>🔬 PROMPT MAESTRO PARA FÍSICA</h2>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt para Física</span><button class="copy-btn" data-target="p-fis">Copiar</button></div>
+      <pre id="p-fis">Quiero estudiar:
+
+[TEMA DE FÍSICA]
+
+Enséñamelo mediante una simulación o visualización interactiva
+si es posible.
+
+Primero quiero experimentar sin una explicación larga.
+
+Quiero poder modificar las variables importantes.
+
+Después:
+1. dime qué he observado;
+2. relaciónalo con las leyes físicas;
+3. introduce las ecuaciones;
+4. explica qué significa cada variable;
+5. dame un experimento mental;
+6. hazme tres preguntas para comprobar mi comprensión.
+
+No quiero memorizar primero.
+Quiero comprender a partir de la observación.</pre>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ MÚSICA ============ -->
+<section id="musica" class="section">
+  <div class="card">
+    <h2>🎹 NOVENO EJERCICIO: Música — Acordes mayor y menor</h2>
+    <p>Aquí empieza a ponerse especialmente interesante para ti.</p>
+    <div class="callout info">
+      <strong>Nomenclatura:</strong> en esta sección se utiliza exclusivamente el <strong>sistema americano de notas</strong>: <code>A, B, C, D, E, F, G</code>. Se indica además el grado de la escala: <code>I, II, III, IV, V, VI, VII</code>.<br>
+      Ejemplo: <strong>C(I), D(II), E(III), F(IV), G(V), A(VI), B(VII)</strong>.
+    </div>
+
+    <p>Prueba:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Acorde mayor</span><button class="copy-btn" data-target="p-ac1">Copiar</button></div>
+      <pre id="p-ac1">Quiero comprender visualmente cómo se construye un acorde mayor.
+
+Crea una representación interactiva de las notas.
+
+Permíteme cambiar la nota fundamental y observar
+cómo se construye el acorde.
+
+Después explícame la relación entre las notas.</pre>
+    </div>
+
+    <p>Después:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Acorde menor</span><button class="copy-btn" data-target="p-ac2">Copiar</button></div>
+      <pre id="p-ac2">Ahora haz lo mismo con un acorde menor.</pre>
+    </div>
+
+    <p>Y finalmente:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Comparación</span><button class="copy-btn" data-target="p-ac3">Copiar</button></div>
+      <pre id="p-ac3">Compara visualmente acorde mayor y menor.
+No me des primero la teoría.
+Quiero explorar la diferencia.</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎹 DÉCIMO EJERCICIO: Piano — Escala de C mayor</h2>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Escala</span><button class="copy-btn" data-target="p-esc">Copiar</button></div>
+      <pre id="p-esc">Quiero comprender visualmente la escala de C mayor.
+
+Crea una representación interactiva de un teclado de piano.
+
+Marca las notas de la escala y permite que pueda explorar
+qué ocurre al cambiar de escala.
+
+Después explícame los patrones de tonos y semitonos.</pre>
+    </div>
+    <p>Esto convierte el aprendizaje abstracto en una representación espacial.</p>
+
+    <h3>Grados de la escala de C mayor (sistema americano)</h3>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Grado</th><th>Nota</th><th>Intervalo respecto al grado anterior</th></tr></thead>
+        <tbody>
+          <tr><td>I</td><td>C</td><td>—</td></tr>
+          <tr><td>II</td><td>D</td><td>Tono</td></tr>
+          <tr><td>III</td><td>E</td><td>Tono</td></tr>
+          <tr><td>IV</td><td>F</td><td>Semitono</td></tr>
+          <tr><td>V</td><td>G</td><td>Tono</td></tr>
+          <tr><td>VI</td><td>A</td><td>Tono</td></tr>
+          <tr><td>VII</td><td>B</td><td>Tono</td></tr>
+          <tr><td>I (octava)</td><td>C</td><td>Semitono</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎹 EJEMPLO REAL: Armonía en el piano</h2>
+    <p>Tema: <strong>armonía</strong>.</p>
+    <p>Primero:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-arm1">Copiar</button></div>
+      <pre id="p-arm1">Muéstrame visualmente cómo se construye una tríada mayor.</pre>
+    </div>
+    <p>Después:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-arm2">Copiar</button></div>
+      <pre id="p-arm2">Ahora conviértela en menor modificando solamente
+la nota necesaria.</pre>
+    </div>
+    <p>Después:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-arm3">Copiar</button></div>
+      <pre id="p-arm3">Muéstrame visualmente qué intervalo ha cambiado.</pre>
+    </div>
+    <p>Después:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-arm4">Copiar</button></div>
+      <pre id="p-arm4">Ahora relaciónalo con la escala mayor.</pre>
+    </div>
+    <p>Y finalmente:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-arm5">Copiar</button></div>
+      <pre id="p-arm5">Ponme un pequeño ejercicio para comprobar que entendí
+lo que acaba de ocurrir.</pre>
+    </div>
+
+    <div class="callout info">
+      <strong>Ejemplo con notación americana:</strong> una progresión típica se escribe así:
+      <div class="flow">
+        <div class="node">C(I) → F(IV) → G(V) → C(I)</div>
+      </div>
+      No como <em>"Do → Fa → Sol → Do"</em>.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎹 PROMPT MAESTRO PARA MÚSICA</h2>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt para Música</span><button class="copy-btn" data-target="p-mus">Copiar</button></div>
+      <pre id="p-mus">Quiero comprender musicalmente:
+
+[TEMA]
+
+Quiero una representación visual e interactiva siempre que sea posible.
+
+Primero quiero observar y experimentar.
+
+Después explícame:
+- qué estoy viendo;
+- qué estoy escuchando conceptualmente;
+- qué relaciones existen;
+- qué regla musical hay detrás.
+
+Después dame un ejercicio práctico para piano.
+
+No quiero empezar con teoría abstracta.
+Quiero aprender haciendo.</pre>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ MATEMÁTICAS ============ -->
+<section id="mate" class="section">
+  <div class="card">
+    <h2>🧮 UNDÉCIMO EJERCICIO: Física + Matemáticas — Función seno</h2>
+    <p>Prueba:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Función seno</span><button class="copy-btn" data-target="p-sen">Copiar</button></div>
+      <pre id="p-sen">Quiero comprender visualmente una función seno.
+
+Crea una representación interactiva donde pueda modificar
+la amplitud, frecuencia y fase y observar cómo cambia
+la gráfica.
+
+No me expliques primero la teoría.
+
+Primero déjame experimentar.
+Después explícame qué relación matemática he observado.</pre>
+    </div>
+    <p>Este tipo de ejercicio es especialmente poderoso porque permite:</p>
+    <div class="flow">
+      <div class="node">variable → modificación → observación → hipótesis → explicación</div>
+    </div>
+    <p>Eso se parece mucho más a experimentar que a memorizar.</p>
+  </div>
+
+  <div class="card">
+    <h2>🧮 PROMPT MAESTRO PARA MATEMÁTICAS</h2>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt para Matemáticas</span><button class="copy-btn" data-target="p-mat">Copiar</button></div>
+      <pre id="p-mat">Quiero comprender:
+
+[TEMA]
+
+Crea una representación visual o interactiva.
+
+Primero déjame manipularla.
+
+Después ayúdame a descubrir qué relación matemática
+estoy observando.
+
+Solo después introduce la notación matemática formal.
+
+Finalmente dame tres ejercicios progresivos:
+1. muy sencillo;
+2. intermedio;
+3. uno que obligue a razonar.
+
+No me des las soluciones hasta que intente resolverlos.</pre>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ MÉTODO ============ -->
+<section id="metodo" class="section">
+  <div class="card">
+    <h2>🧠 El concepto clave: aprender por curiosidad</h2>
+    <p>Este punto es más importante que cualquier botón.</p>
+    <p>La enseñanza tradicional suele funcionar así:</p>
+    <div class="flow"><div class="node">profesor → tema → explicación → ejercicios.</div></div>
+    <p>El chat funciona normalmente así:</p>
+    <div class="flow"><div class="node">usuario → pregunta → respuesta.</div></div>
+    <p>Immersive View introduce otra posibilidad:</p>
+    <div class="flow"><div class="node">curiosidad → exploración → descubrimiento → nueva curiosidad.</div></div>
+    <p>Esto es especialmente interesante cuando todavía no sabes exactamente qué quieres preguntar.</p>
+  </div>
+
+  <div class="card">
+    <h2>💬 ¿Y si quiero aprender algo concreto?</h2>
+    <p>Aquí es donde combinamos Immersive View con el Gemini normal.</p>
+    <p>Supongamos que quieres estudiar: <strong>la energía cinética.</strong></p>
+    <p>Puedes empezar explorando visualmente.</p>
+    <p>Después puedes pasar al chat y escribir:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Energía cinética</span><button class="copy-btn" data-target="p-cin">Copiar</button></div>
+      <pre id="p-cin">Estoy explorando la energía cinética visualmente.
+
+Ahora quiero que me enseñes el concepto desde cero,
+pero de forma progresiva.
+
+Primero dame una explicación intuitiva.
+Después un ejemplo cotidiano.
+Después una representación matemática sencilla.
+Finalmente proponme un pequeño experimento mental.</pre>
+    </div>
+    <p>La exploración visual y el diálogo cumplen funciones diferentes.</p>
+    <div class="chips">
+      <span class="chip">Visualización = explorar</span>
+      <span class="chip p">Chat = preguntar, comprobar y profundizar</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧠 EL MÉTODO RUBÉN: aprender haciendo con IA</h2>
+    <p>Puedes convertir todo esto en un método.</p>
+
+    <h4>Fase 1 — Explorar</h4>
+    <p>No estudies. Mira. Pulsa. Rota. Amplía. Experimenta.</p>
+
+    <h4>Fase 2 — Preguntar</h4>
+    <p>Cuando algo despierte tu curiosidad: <em>"¿Por qué ocurre esto?"</em></p>
+
+    <h4>Fase 3 — Explicar</h4>
+    <p>Pídele a Gemini una explicación sencilla.</p>
+
+    <h4>Fase 4 — Experimentar</h4>
+    <p>Pídele una simulación o ejemplo.</p>
+
+    <h4>Fase 5 — Comprobar</h4>
+    <p>Pídele preguntas.</p>
+
+    <h4>Fase 6 — Explicar tú</h4>
+    <p>Esta es la parte más importante. Escribe:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Fase 6</span><button class="copy-btn" data-target="p-f6">Copiar</button></div>
+      <pre id="p-f6">Ahora voy a explicarte con mis propias palabras lo que creo
+que he entendido.
+
+No me corrijas hasta que termine.
+Después señala solamente los errores conceptuales.</pre>
+    </div>
+
+    <h4>Fase 7 — Repetir</h4>
+    <p>Vuelve a la visualización. Ahora probablemente verás cosas que antes no veías.</p>
+  </div>
+
+  <div class="card">
+    <h2>🎯 La técnica más potente: explicarle a la IA</h2>
+    <p>Después de explorar un concepto:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-ex">Copiar</button></div>
+      <pre id="p-ex">Voy a explicarte lo que he entendido.
+
+Tu trabajo es detectar:
+1. errores conceptuales,
+2. conceptos incompletos,
+3. relaciones que estoy confundiendo.
+
+No me des una nueva explicación completa.
+Corrige solamente lo necesario.</pre>
+    </div>
+    <p>Esto evita convertir la sesión en una sucesión infinita de explicaciones pasivas.</p>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ PROMPTS ============ -->
+<section id="prompts" class="section">
+  <div class="card">
+    <h2>📝 PROMPT MAESTRO PARA EXPLORACIÓN VISUAL</h2>
+    <p>Copia este prompt cuando quieras convertir un tema en una experiencia de aprendizaje:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Maestro</span><button class="copy-btn" data-target="p-maestro">Copiar</button></div>
+      <pre id="p-maestro">Quiero aprender sobre:
+
+[TEMA]
+
+Quiero que lo conviertas en una experiencia de aprendizaje
+visual e interactiva.
+
+OBJETIVO:
+No quiero comenzar con una explicación larga.
+
+Primero quiero explorar visualmente el concepto.
+
+Después quiero:
+1. identificar las partes principales;
+2. explorar sus relaciones;
+3. modificar variables cuando sea posible;
+4. observar qué cambia;
+5. formular preguntas;
+6. recibir explicaciones sencillas;
+7. hacer pequeños ejercicios;
+8. comprobar si realmente entendí.
+
+REGLA PEDAGÓGICA:
+No me des toda la teoría de golpe.
+
+Quiero aprender haciendo:
+explorar → observar → preguntar → experimentar → explicar → comprobar.
+
+Cuando termine de explorar, hazme preguntas para comprobar
+mi comprensión.
+
+Si existe una simulación interactiva adecuada, utilízala.
+Si no existe, crea la mejor representación visual posible.</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📝 PROMPT PARA FÍSICA</h2>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Física</span><button class="copy-btn" data-target="p-pro-fis">Copiar</button></div>
+      <pre id="p-pro-fis">Quiero estudiar:
+
+[TEMA DE FÍSICA]
+
+Enséñamelo mediante una simulación o visualización interactiva
+si es posible.
+
+Primero quiero experimentar sin una explicación larga.
+
+Quiero poder modificar las variables importantes.
+
+Después:
+1. dime qué he observado;
+2. relaciónalo con las leyes físicas;
+3. introduce las ecuaciones;
+4. explica qué significa cada variable;
+5. dame un experimento mental;
+6. hazme tres preguntas para comprobar mi comprensión.
+
+No quiero memorizar primero.
+Quiero comprender a partir de la observación.</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📝 PROMPT PARA MATEMÁTICAS</h2>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Matemáticas</span><button class="copy-btn" data-target="p-pro-mat">Copiar</button></div>
+      <pre id="p-pro-mat">Quiero comprender:
+
+[TEMA]
+
+Crea una representación visual o interactiva.
+
+Primero déjame manipularla.
+
+Después ayúdame a descubrir qué relación matemática
+estoy observando.
+
+Solo después introduce la notación matemática formal.
+
+Finalmente dame tres ejercicios progresivos:
+1. muy sencillo;
+2. intermedio;
+3. uno que obligue a razonar.
+
+No me des las soluciones hasta que intente resolverlos.</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📝 PROMPT PARA MÚSICA</h2>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Música</span><button class="copy-btn" data-target="p-pro-mus">Copiar</button></div>
+      <pre id="p-pro-mus">Quiero comprender musicalmente:
+
+[TEMA]
+
+Quiero una representación visual e interactiva siempre que sea posible.
+
+Primero quiero observar y experimentar.
+
+Después explícame:
+- qué estoy viendo;
+- qué estoy escuchando conceptualmente;
+- qué relaciones existen;
+- qué regla musical hay detrás.
+
+Después dame un ejercicio práctico para piano.
+
+No quiero empezar con teoría abstracta.
+Quiero aprender haciendo.</pre>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ BUENAS PRÁCTICAS ============ -->
+<section id="buenas" class="section">
+  <div class="card">
+    <h2>⚖️ Cuándo NO utilizar Immersive View</h2>
+    <p>No todo necesita una visualización.</p>
+    <p>Para:</p>
+    <ul>
+      <li>una definición corta;</li>
+      <li>una traducción;</li>
+      <li>una operación matemática sencilla;</li>
+      <li>una lista;</li>
+      <li>una corrección de texto;</li>
+    </ul>
+    <p>el chat tradicional suele ser más rápido.</p>
+    <p>Immersive View tiene más sentido cuando existe:</p>
+    <div class="chips">
+      <span class="chip">estructura</span>
+      <span class="chip g">relaciones</span>
+      <span class="chip a">espacio</span>
+      <span class="chip p">evolución</span>
+      <span class="chip">curiosidad</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔗 Integrarlo con NotebookLM</h2>
+    <p>Aquí aparece una combinación especialmente potente.</p>
+    <p>Puedes utilizar:</p>
+    <div class="chips">
+      <span class="chip">NotebookLM → fuentes documentales</span>
+      <span class="chip g">Gemini → exploración visual e interacción</span>
+      <span class="chip p">ChatGPT → planificación, explicación, síntesis y creación de materiales</span>
+    </div>
+    <p>Un flujo podría ser:</p>
+    <div class="flow">
+      <div class="node">DOCUMENTACIÓN</div><span class="arrow">↓</span>
+      <div class="node">NotebookLM</div><span class="arrow">↓</span>
+      <div class="node">comprensión inicial</div><span class="arrow">↓</span>
+      <div class="node">Gemini / visualización</div><span class="arrow">↓</span>
+      <div class="node">exploración</div><span class="arrow">↓</span>
+      <div class="node">preguntas</div><span class="arrow">↓</span>
+      <div class="node">ChatGPT</div><span class="arrow">↓</span>
+      <div class="node">síntesis + ejercicios + tutorial</div><span class="arrow">↓</span>
+      <div class="node">Notion</div><span class="arrow">↓</span>
+      <div class="node">contexto permanente</div>
+    </div>
+    <p>No necesitas utilizar las tres herramientas siempre. La idea es asignar a cada una el trabajo que mejor realiza.</p>
+  </div>
+
+  <div class="card">
+    <h2>🎹 Ejemplo real para el Yamaha PSR-SX920</h2>
+    <div class="callout warn">
+      <strong>⚠ ADVERTENCIA:</strong> aquí hay una precaución importante. Para aprender el funcionamiento exacto del PSR-SX920, <strong>la visualización no sustituye al manual oficial</strong>.
+    </div>
+    <p>Puedes utilizar Gemini para comprender conceptos generales:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt</span><button class="copy-btn" data-target="p-psr1">Copiar</button></div>
+      <pre id="p-psr1">Explícame visualmente qué significa acompañamiento automático
+en un teclado arranger.</pre>
+    </div>
+    <p>Pero para una operación concreta:</p>
+    <div class="flow"><div class="node">"¿Qué botón tengo que pulsar para guardar este OTS?"</div></div>
+    <p>la fuente debe ser la documentación correspondiente del Yamaha.</p>
+    <div class="chips">
+      <span class="chip g">La visualización sirve para entender</span>
+      <span class="chip a">El manual sirve para verificar el procedimiento</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🛡 Cómo evitar aprender cosas incorrectas</h2>
+    <p>Las IA pueden cometer errores.</p>
+    <p>Google advierte expresamente que Gemini puede equivocarse y recomienda verificar sus respuestas.</p>
+    <p>Por eso utiliza esta regla:</p>
+
+    <div class="acc" data-acc>
+      <div class="acc-h">Para conceptos generales</div>
+      <div class="acc-b"><p>Puedes explorar libremente.</p></div>
+    </div>
+    <div class="acc" data-acc>
+      <div class="acc-h">Para datos científicos</div>
+      <div class="acc-b"><p>Comprueba las afirmaciones importantes.</p></div>
+    </div>
+    <div class="acc" data-acc>
+      <div class="acc-h">Para procedimientos técnicos</div>
+      <div class="acc-b"><p>Utiliza documentación oficial.</p></div>
+    </div>
+    <div class="acc" data-acc>
+      <div class="acc-h">Para decisiones importantes</div>
+      <div class="acc-b"><p>Busca fuentes primarias y contrasta.</p></div>
+    </div>
+    <div class="acc" data-acc>
+      <div class="acc-h">Para aprender</div>
+      <div class="acc-b"><p>Utiliza la IA como tutor, no como autoridad absoluta.</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ EXPERIMENTO FINAL ============ -->
+<section id="experimento" class="section">
+  <div class="card">
+    <h2>🎯 El experimento final</h2>
+    <p>Ahora haz algo más ambicioso.</p>
+    <p>Elige un tema que <strong>no conozcas absolutamente nada</strong>.</p>
+    <p>Por ejemplo:</p>
+    <div class="flow"><div class="node">quásares.</div></div>
+    <p>No busques información previamente.</p>
+    <p>Entra en Immersive View y explora.</p>
+    <p>Después de 10-15 minutos escribe en un papel:</p>
+    <div class="flow"><div class="node">"Esto es lo que creo que he entendido."</div></div>
+    <p>Luego pídele a Gemini:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Verificación</span><button class="copy-btn" data-target="p-final1">Copiar</button></div>
+      <pre id="p-final1">Voy a explicarte lo que creo que he entendido sobre los quásares.
+
+No me des información nueva todavía.
+
+Primero analiza mi explicación.
+
+Dime:
+- qué está correcto;
+- qué está incompleto;
+- qué está equivocado.
+
+Después ayúdame a corregir únicamente lo necesario.</pre>
+    </div>
+    <p>Finalmente:</p>
+    <div class="prompt">
+      <div class="prompt-header"><span>Prompt Preguntas</span><button class="copy-btn" data-target="p-final2">Copiar</button></div>
+      <pre id="p-final2">Ahora hazme cinco preguntas sobre lo que acabo de aprender.
+
+No me des las respuestas.</pre>
+    </div>
+    <p>Si puedes responderlas, has convertido una navegación visual en aprendizaje activo.</p>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ RESUMEN ============ -->
+<section id="resumen" class="section">
+  <div class="card">
+    <h2>⚡ Resumen de uso en 30 segundos</h2>
+    <p>Cuando quieras aprender algo:</p>
+    <ol class="steps">
+      <li>Elige un tema.</li>
+      <li>Entra en Immersive View si está disponible.</li>
+      <li>Observa.</li>
+      <li>Pulsa lo que te produzca curiosidad.</li>
+      <li>Sigue una rama.</li>
+      <li>Profundiza.</li>
+      <li>Cuando aparezca una duda, pregunta.</li>
+      <li>Si existe una simulación, manipúlala.</li>
+      <li>Explica tú lo que has entendido.</li>
+      <li>Pide a Gemini que detecte tus errores.</li>
+      <li>Haz ejercicios.</li>
+      <li>Guarda lo importante en tu sistema de conocimiento.</li>
+    </ol>
+    <div class="callout example">
+      <strong>La idea central es:</strong><br>
+      <strong>NO CONSUMIR INFORMACIÓN.<br>EXPLORARLA.</strong>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ FUENTES ============ -->
+<section id="fuentes" class="section">
+  <div class="card">
+    <h2>🔗 Fuentes y referencias</h2>
+    <p>Todas las fuentes utilizadas para elaborar este tutorial. Los enlaces se muestran tal como aparecen en el documento original.</p>
+
+    <h3>Google — Gemini y herramientas para estudiantes</h3>
+    <p>Google, "Start the semester with one year of Gemini, on us", 19 agosto 2026.<br>
+    <a href="https://blog.google/innovation-and-ai/products/gemini-app/student-offer-google-ai/" target="_blank" rel="noopener">https://blog.google/innovation-and-ai/products/gemini-app/student-offer-google-ai/</a></p>
+
+    <h3>Google — Back to School 2026</h3>
+    <p><a href="https://blog.google/products-and-platforms/products/education/back-to-school-2026/" target="_blank" rel="noopener">https://blog.google/products-and-platforms/products/education/back-to-school-2026/</a></p>
+
+    <h3>Google — Interactive visualizations</h3>
+    <p>La documentación oficial describe visualizaciones interactivas, incluyendo simulaciones 3D funcionales.<br>
+    <a href="https://blog.google/innovation-and-ai/products/gemini-app/student-offer-google-ai/" target="_blank" rel="noopener">https://blog.google/innovation-and-ai/products/gemini-app/student-offer-google-ai/</a></p>
+
+    <h3>Google — Interactive Images</h3>
+    <p><a href="https://blog.google/products-and-platforms/products/education/gemini-interactive-images/" target="_blank" rel="noopener">https://blog.google/products-and-platforms/products/education/gemini-interactive-images/</a></p>
+
+    <h3>Google — Gemini Apps Help</h3>
+    <p><a href="https://support.google.com/gemini/answer/13275745" target="_blank" rel="noopener">https://support.google.com/gemini/answer/13275745</a></p>
+
+    <h3>TestingCatalog — descubrimiento de Gemini Immersive View</h3>
+    <p>"Gemini Immersive View appears in the Students section", 7 septiembre 2026.<br>
+    <a href="https://www.testingcatalog.com/gemini-immersive-view-appears-in-the-students-section/" target="_blank" rel="noopener">https://www.testingcatalog.com/gemini-immersive-view-appears-in-the-students-section/</a></p>
+  </div>
+
+  <div class="card">
+    <h2>📌 Nota para la futura versión HTML</h2>
+    <p>El documento fuente está pensado deliberadamente como <strong>fuente de contenido</strong> para un tutorial HTML posterior.</p>
+    <p>La futura versión HTML podría organizarlo en pestañas:</p>
+    <div class="chips">
+      <span class="chip">🧭 Qué es</span>
+      <span class="chip g">🚀 Primeros pasos</span>
+      <span class="chip a">🧪 Ejercicios</span>
+      <span class="chip p">🔬 Física</span>
+      <span class="chip">🎹 Música</span>
+      <span class="chip g">🧮 Matemáticas</span>
+      <span class="chip a">🧠 Método de aprendizaje</span>
+      <span class="chip p">📝 Prompts</span>
+      <span class="chip">🔗 Fuentes</span>
+    </div>
+    <p>También sería especialmente útil añadir:</p>
+    <ul>
+      <li>botón <strong>Copiar</strong> a cada prompt;</li>
+      <li>buscador;</li>
+      <li>índice lateral;</li>
+      <li>bloques desplegables;</li>
+      <li>indicador de progreso;</li>
+      <li>sección "Prueba esto ahora";</li>
+      <li>enlaces oficiales;</li>
+      <li>advertencia visual sobre funciones experimentales;</li>
+      <li>diseño <strong>mobile-first</strong>.</li>
+    </ul>
+    <p>Así el Markdown no es solamente documentación: funciona como el <strong>contenido maestro</strong> desde el que posteriormente puede construirse un tutorial HTML interactivo.</p>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<!-- ============ CRÉDITOS ============ -->
+<section id="creditos" class="section">
+  <div class="hero-svg" id="creditos-svg"></div>
+
+  <div class="card">
+    <h2>★ Créditos</h2>
+
+    <div class="credit-grid">
+      <div class="credit-item">
+        <div class="lbl">Título del tutorial</div>
+        <div class="val acc">Gemini Immersive View — Súper tutorial paso a paso</div>
+      </div>
+      <div class="credit-item">
+        <div class="lbl">Autor / Créditos</div>
+        <div class="val">Rubén Sbarsky</div>
+      </div>
+      <div class="credit-item">
+        <div class="lbl">Fecha</div>
+        <div class="val">24/09/2026</div>
+      </div>
+      <div class="credit-item">
+        <div class="lbl">Hora</div>
+        <div class="val">16:36:16</div>
+      </div>
+      <div class="credit-item">
+        <div class="lbl">Tipo</div>
+        <div class="val">Tutorial educativo interactivo</div>
+      </div>
+      <div class="credit-item">
+        <div class="lbl">Fuente del contenido</div>
+        <div class="val">Guía Súper Tutorial — Gemini Immersive View (24/09/2026)</div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <strong>📚 Nota:</strong> este tutorial ha sido elaborado exclusivamente con fines <strong>educativos y de divulgación</strong>. El contenido se conserva íntegro respecto al documento fuente y se presenta en formato HTML interactivo de una sola página (SPA) sin dependencias externas.
+    </div>
+
+    <div class="quote">
+      "Si no puedes explicarlo de forma sencilla, es que no lo entiendes lo suficientemente bien."
+    </div>
+
+    <div class="callout example" style="text-align:center;font-style:italic;font-size:1rem">
+      <strong>Fiat iustitia, ruat caelum.</strong>
+    </div>
+  </div>
+
+  <footer>
+    <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+    <div class="sig">👨‍💻 Créditos: Rubén Sbarsky</div>
+    <div>📅 FECHA: 24/09/2026 · Hora: 16:36:16</div>
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </footer>
+</section>
+
+<button id="totop" aria-label="Volver arriba">↑</button>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---- Montar el SVG en HOME y CRÉDITOS ---- */
+  const tpl = document.getElementById('svgTemplate');
+  function mountSvg(containerId){
+    const c = document.getElementById(containerId);
+    if(!c) return;
+    c.innerHTML = '';
+    const clone = tpl.content.cloneNode(true);
+    c.appendChild(clone);
+  }
+  mountSvg('home-svg');
+  mountSvg('creditos-svg');
+
+  /* ---- SPA Nav ---- */
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sections = document.querySelectorAll('.section');
+
+  function showSection(id){
+    sections.forEach(s => {
+      if(s.id === id){ s.classList.add('active'); }
+      else { s.classList.remove('active'); }
+    });
+    navLinks.forEach(l => {
+      if(l.dataset.target === id){ l.classList.add('active'); }
+      else { l.classList.remove('active'); }
+    });
+    // Reiniciar SVG de créditos al entrar (para que la animación se reinicie)
+    if(id === 'creditos'){
+      mountSvg('creditos-svg');
+    }
+    // Scroll al top
+    window.scrollTo({top:0, behavior:'auto'});
+    // Centrar el link activo en el scroll horizontal del nav
+    const activeLink = document.querySelector('.nav-link.active');
+    if(activeLink){
+      activeLink.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
+    }
+    // Resetear progreso
+    updateProgress();
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      showSection(link.dataset.target);
+    });
+  });
+
+  /* ---- Acordeones ---- */
+  document.querySelectorAll('[data-acc]').forEach(acc => {
+    const h = acc.querySelector('.acc-h');
+    if(h){
+      h.addEventListener('click', () => acc.classList.toggle('open'));
+    }
+  });
+
+  /* ---- Botones de copiado ---- */
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.dataset.target;
+      const el = document.getElementById(targetId);
+      if(!el) return;
+      const text = el.textContent;
+      const done = () => {
+        btn.textContent = '✓ Copiado';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copiar';
+          btn.classList.remove('copied');
+        }, 1600);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(() => {
+          fallbackCopy(text, done);
+        });
+      } else {
+        fallbackCopy(text, done);
+      }
+    });
+  });
+
+  function fallbackCopy(text, cb){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  /* ---- Barra de progreso + botón volver arriba ---- */
+  const progress = document.getElementById('progress');
+  const totop = document.getElementById('totop');
+
+  function updateProgress(){
+    const active = document.querySelector('.section.active');
+    if(!active) return;
+    const rect = active.getBoundingClientRect();
+    const total = active.scrollHeight - window.innerHeight;
+    let pct = 0;
+    if(total > 0){
+      pct = Math.min(100, Math.max(0, (-rect.top / total) * 100));
+    } else {
+      pct = 100;
+    }
+    progress.style.width = pct + '%';
+    if(window.scrollY > 300){ totop.classList.add('show'); }
+    else { totop.classList.remove('show'); }
+  }
+
+  window.addEventListener('scroll', updateProgress, {passive:true});
+  window.addEventListener('resize', updateProgress);
+
+  totop.addEventListener('click', () => {
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  /* ---- prefers-reduced-motion ---- */
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(prefersReduced){
+    // Reducir la velocidad de las animaciones SVG
+    document.querySelectorAll('svg animate, svg animateTransform, svg animateMotion').forEach(a => {
+      const dur = a.getAttribute('dur');
+      if(dur){
+        const m = dur.match(/^([\d.]+)s$/);
+        if(m){
+          a.setAttribute('dur', (parseFloat(m[1]) * 3) + 's');
+        }
+      }
+    });
+  }
+
+  updateProgress();
+})();
+</script>
+
+</body>
+</html>
